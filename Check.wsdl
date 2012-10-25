@@ -1,0 +1,102 @@
+<?xml version="1.0" ?>
+<definitions name="Check" targetNamespace="urn:Check" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="urn:Check" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" xmlns="http://schemas.xmlsoap.org/wsdl/">
+<types xmlns="http://schemas.xmlsoap.org/wsdl/" />
+<portType name="CheckPort"><operation name="time_string">
+<input message="tns:time_stringRequest" />
+<output message="tns:time_stringResponse" />
+</operation>
+<operation name="get_class_id">
+<input message="tns:get_class_idRequest" />
+<output message="tns:get_class_idResponse" />
+</operation>
+<operation name="insert_blue_mac">
+<input message="tns:insert_blue_macRequest" />
+<output message="tns:insert_blue_macResponse" />
+</operation>
+<operation name="insert_end_blue_mac">
+<input message="tns:insert_end_blue_macRequest" />
+<output message="tns:insert_end_blue_macResponse" />
+</operation>
+<operation name="single_insert">
+<input message="tns:single_insertRequest" />
+<output message="tns:single_insertResponse" />
+</operation>
+</portType>
+<binding name="CheckBinding" type="tns:CheckPort">
+<soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http" />
+<operation name="time_string">
+<soap:operation soapAction="urn:Check#Check#time_string" />
+<input><soap:body use="encoded" namespace="urn:Check" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+</input>
+<output>
+<soap:body use="encoded" namespace="urn:Check" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+</output>
+</operation>
+<operation name="get_class_id">
+<soap:operation soapAction="urn:Check#Check#get_class_id" />
+<input><soap:body use="encoded" namespace="urn:Check" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+</input>
+<output>
+<soap:body use="encoded" namespace="urn:Check" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+</output>
+</operation>
+<operation name="insert_blue_mac">
+<soap:operation soapAction="urn:Check#Check#insert_blue_mac" />
+<input><soap:body use="encoded" namespace="urn:Check" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+</input>
+<output>
+<soap:body use="encoded" namespace="urn:Check" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+</output>
+</operation>
+<operation name="insert_end_blue_mac">
+<soap:operation soapAction="urn:Check#Check#insert_end_blue_mac" />
+<input><soap:body use="encoded" namespace="urn:Check" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+</input>
+<output>
+<soap:body use="encoded" namespace="urn:Check" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+</output>
+</operation>
+<operation name="single_insert">
+<soap:operation soapAction="urn:Check#Check#single_insert" />
+<input><soap:body use="encoded" namespace="urn:Check" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+</input>
+<output>
+<soap:body use="encoded" namespace="urn:Check" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+</output>
+</operation>
+</binding>
+<service name="Check">
+<documentation />
+<port name="CheckPort" binding="tns:CheckBinding"><soap:address location="http://210.42.151.54:8000/checkin/server_check.php" />
+</port>
+</service>
+<message name="time_stringRequest">
+</message>
+<message name="time_stringResponse">
+<part name="time_string" type="xsd:string" />
+</message>
+<message name="get_class_idRequest">
+<part name="class_id_xml" type="xsd:string" />
+</message>
+<message name="get_class_idResponse">
+<part name="get_class_id" type="xsd:string" />
+</message>
+<message name="insert_blue_macRequest">
+<part name="bluetooth_xml" type="xsd:string" />
+</message>
+<message name="insert_blue_macResponse">
+<part name="insert_blue_mac" type="xsd:string" />
+</message>
+<message name="insert_end_blue_macRequest">
+<part name="bluetooth_end_xml" type="xsd:string" />
+</message>
+<message name="insert_end_blue_macResponse">
+<part name="insert_end_blue_mac" type="xsd:string" />
+</message>
+<message name="single_insertRequest">
+<part name="single_insert_xml" type="xsd:string" />
+</message>
+<message name="single_insertResponse">
+<part name="single_insert" type="xsd:string" />
+</message>
+</definitions>
