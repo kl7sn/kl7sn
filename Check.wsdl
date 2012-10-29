@@ -5,6 +5,14 @@
 <input message="tns:time_stringRequest" />
 <output message="tns:time_stringResponse" />
 </operation>
+<operation name="check">
+<input message="tns:checkRequest" />
+<output message="tns:checkResponse" />
+</operation>
+<operation name="course">
+<input message="tns:courseRequest" />
+<output message="tns:courseResponse" />
+</operation>
 <operation name="get_class_id">
 <input message="tns:get_class_idRequest" />
 <output message="tns:get_class_idResponse" />
@@ -25,7 +33,23 @@
 <binding name="CheckBinding" type="tns:CheckPort">
 <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http" />
 <operation name="time_string">
-<soap:operation soapAction="urn:Check#Check#time_string" />
+<soap:operation soapAction="urn:Check#check#time_string" />
+<input><soap:body use="encoded" namespace="urn:Check" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+</input>
+<output>
+<soap:body use="encoded" namespace="urn:Check" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+</output>
+</operation>
+<operation name="check">
+<soap:operation soapAction="urn:Check#check#check" />
+<input><soap:body use="encoded" namespace="urn:Check" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+</input>
+<output>
+<soap:body use="encoded" namespace="urn:Check" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+</output>
+</operation>
+<operation name="course">
+<soap:operation soapAction="urn:Check#check#course" />
 <input><soap:body use="encoded" namespace="urn:Check" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
 </input>
 <output>
@@ -33,7 +57,7 @@
 </output>
 </operation>
 <operation name="get_class_id">
-<soap:operation soapAction="urn:Check#Check#get_class_id" />
+<soap:operation soapAction="urn:Check#check#get_class_id" />
 <input><soap:body use="encoded" namespace="urn:Check" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
 </input>
 <output>
@@ -41,7 +65,7 @@
 </output>
 </operation>
 <operation name="insert_blue_mac">
-<soap:operation soapAction="urn:Check#Check#insert_blue_mac" />
+<soap:operation soapAction="urn:Check#check#insert_blue_mac" />
 <input><soap:body use="encoded" namespace="urn:Check" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
 </input>
 <output>
@@ -49,7 +73,7 @@
 </output>
 </operation>
 <operation name="insert_end_blue_mac">
-<soap:operation soapAction="urn:Check#Check#insert_end_blue_mac" />
+<soap:operation soapAction="urn:Check#check#insert_end_blue_mac" />
 <input><soap:body use="encoded" namespace="urn:Check" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
 </input>
 <output>
@@ -57,7 +81,7 @@
 </output>
 </operation>
 <operation name="single_insert">
-<soap:operation soapAction="urn:Check#Check#single_insert" />
+<soap:operation soapAction="urn:Check#check#single_insert" />
 <input><soap:body use="encoded" namespace="urn:Check" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
 </input>
 <output>
@@ -74,6 +98,19 @@
 </message>
 <message name="time_stringResponse">
 <part name="time_string" type="xsd:string" />
+</message>
+<message name="checkRequest">
+<part name="ID" type="xsd:string" />
+<part name="password" type="xsd:string" />
+</message>
+<message name="checkResponse">
+<part name="check" type="xsd:string" />
+</message>
+<message name="courseRequest">
+<part name="course_no" type="xsd:string" />
+</message>
+<message name="courseResponse">
+<part name="course" type="xsd:string" />
 </message>
 <message name="get_class_idRequest">
 <part name="class_id_xml" type="xsd:string" />
