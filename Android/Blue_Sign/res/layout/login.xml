@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/ivory"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="45dip"
+        android:background="@drawable/title_bar_bg" >
+        <TextView
+            android:id="@+id/txtNewPayout"
+            android:layout_width="0.0dip"
+            android:layout_height="fill_parent"
+            android:layout_weight="1.0"
+            android:clickable="true"
+            android:ellipsize="end"
+            android:focusable="true"
+            android:gravity="center"
+            android:singleLine="true"
+            android:text="系統登錄"
+            android:textColor="#FFFFFF"
+            android:textSize="25.0dip" />
+    </LinearLayout>
+
+    <TableLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="105dp"
+        android:background="#FFFFCC"
+        android:paddingBottom="20dp" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10.0dip"
+            android:gravity="center" >
+
+            <TextView
+                android:id="@+id/formlogin_tv_system"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textColor="#FF000000"
+                android:textSize="25.0dip" />
+        </LinearLayout>
+
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:gravity="center" >
+
+            <TextView
+                android:id="@+id/formlogin_tv_userid"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:text="帳號:"
+                android:textColor="#FF000000"
+                android:textSize="20.0dip" />
+
+            <EditText
+                android:id="@+id/formlogin_userid"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.0"
+                android:background="#40101010"
+                android:hint="請在此鍵入您的帳戶號"
+                android:inputType="textWebEditText"
+                android:maxLength="20"
+                android:paddingBottom="10dip"
+                android:paddingLeft="10dip"
+                android:paddingTop="10dip"
+                android:singleLine="true"
+                android:state_focused="true" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="10px" >
+        </TableRow>
+
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:gravity="center" >
+
+            <TextView
+                android:id="@+id/formlogin_tv_pwd"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:text="密碼:"
+                android:textColor="#FF000000"
+                android:textSize="20.0dip" />
+
+            <EditText
+                android:id="@+id/formlogin_pwd"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.0"
+                android:background="#40101010"
+                android:hint="請在此鍵入您的密碼"
+                android:inputType="textPassword"
+                android:maxLength="30"
+                android:paddingBottom="10dip"
+                android:paddingLeft="10dip"
+                android:paddingTop="10dip"
+                android:singleLine="true" />
+        </TableRow>
+    </TableLayout>
+
+    <Button
+        android:id="@+id/formlogin_btsubmit"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="30dp"
+        android:background="@color/hongse"
+        android:gravity="center"
+        android:text="登入"
+        android:textColor="@color/baise"
+        android:textSize="20dp" />
+
+</LinearLayout>

@@ -1,5 +1,9 @@
 <?php
 /**
+ * Code it for students' signing , through bluetooth.
+ *
+ * We have functions like follows:
+ * 
  * public:
  *   	check()
  *   	course()
@@ -7,55 +11,49 @@
  *   	insert_blue_mac()
  *   	insert_end_blue_mac()
  *   	single_insert()
- *   	
- * private:
- * 		insert_check_id()
- *   	get_check_id()
- *    	get_stu_num($class_id_xml ,$CheckIn_ID)
- * 		insert_blue_mac_info($bluetooth_xml)
- *   	checked_num($CheckIn_ID)
- *    	utf2gbk($str)
- *     	gbk2utf($str)
- *     	time()
+ * 
+ * PHP version 5
+ * @link http://github.com/mixmore/blue_check
+ * @author MEX
+ * @copyright  2012 South-Center University For Nationalities's 505 computer laboratory
+ * SCUEC SIGNING WEBSERVICE
+ *
  */
 
-
-
 /**
- * 被调用提供蓝牙检测的
+ * BLUETOOTH SIGN IN
  *
  * @package default
- * @author Mex
  **/
 class Check
 {
 	/**
-	 * 构造函数
+	 * constructor
 	 *
 	 * @return void
-	 * @author mex
 	 **/
 	function __construct()
 	{
-		$this->server   ='210.42.151.55';  
-		$this->username ='bluetooth';  
-		$this->password ='blue@123';  
-		$this->database ='Blue'; 
+		// database setting
+		$this->server   ='';  
+		$this->username ='';  
+		$this->password ='';  
+		$this->database =''; 
 		$this->connstr  = "Driver={SQL Server};Server=$this->server;Database=$this->database";
 	}
 
 	/**
-	 * 判断用户是否登陆成功
-	 * 成功返回 1 
-	 * 失败返回 0
+	 * judge user whether login success
+	 * TURE 1 
+	 * FALSE 0
 	 *
 	 * @return int
-	 * @author Mex
 	 **/
 	public function check($ID ,$password)
 	{
+		// link database
 		$conn = odbc_connect( $this->connstr, $this->username, $this->password,SQL_CUR_USE_ODBC);
-
+		// it likes no use here
 		$ID       = $ID;
 		$password = $password;
 
@@ -80,26 +78,30 @@ class Check
 		odbc_close ($conn);
 		return $result;
 	}
+
 	/**
-	 * 返回 课程名，老师姓名
-	 * <course_return>
- 	 * 	<flag></flag>
- 	 *	<CourseName></CourseName>
- 	 *	<CourseTeacher></CourseTeacher>
- 	 * </coures_return>
+	 * GET course number
+	 * RETURN course name & course teacher
+ 	 * GET SUCCSEE will have a flag .(1)
+ 	 * 		LIKE:
+ 	 * 	
+ 	 * 	<flag>1</flag>
+ 	 *	<CourseName>course name</CourseName>
+ 	 *	<CourseTeacher>course teacher</CourseTeacher>
+ 	 *  </coures_return>
 	 *
 	 * @return void
 	 * @author mex
 	 **/
 	public function course($course_no)
 	{
-		$course_no = $this->utf2gbk( $course_no);
+		// GET course number in GBK
+		$course_no = $this->utf2gbk( $course_no );
 
-		// TODO 获取课程字典表中的信息并返回
-		$conn     = odbc_connect( $this->connstr, $this->username, $this->password,SQL_CUR_USE_ODBC);
+		$conn = odbc_connect( $this->connstr, $this->username, $this->password,SQL_CUR_USE_ODBC);
 		
-		// 取出所以的课程信息
-		$sql_course = "SELECT * from dbo.DIC_Course WHERE CourseClassNo = $course_no";
+		// GET class infomation
+		$sql_course = "SELECT * from dbo.DIC_Course WHERE CourseClassNo = '$course_no'";
 		$exe_course = odbc_exec( $conn, $sql_course);
 		if($exe_course)
 		{
@@ -128,142 +130,159 @@ class Check
 	}
 
 	/*
-	* 获取签到流水号，并将学生信息插入 T_List
-	* 返回上课总人数和签到流水号
+	* GET sign serial number and use it in T_List to get student number
+	* RETURN the student sum number and sing serial number
 	*/
 	public function get_class_id($class_id_xml)		
 	{ 
 		$stu_num = "0";
-		// 获取到的数据插入数据库
-		$insert_flag = $this->insert_check_id($class_id_xml);
-		
+		// Insert in db to get serial number
+		$insert_flag = $this->insert_check_id($class_id_xml);		
 		if($insert_flag == 1)
 		{
-			// 获取流水号
+			// get serial number
 			$CheckIn_ID = $this->get_check_id();
 	
-			// 如果flag为1，获取学生表中的信息，然后插入T_list
+			// If the flag is 1, get the students to the table of information, and then insert T_list
 			if($CheckIn_ID != '-1')
 			{	
-				// 得到应到学生人数
+				// Get the number of students
 				$stu_num = $this->get_stu_num($class_id_xml ,$CheckIn_ID);
 			}
-			// 返回学生总数，签到流水号
+			// return students' sum and serial number
 			$CheckIn_ID = $this->gbk2utf($CheckIn_ID);
 			$stuinfo = "$stu_num"."_"."$CheckIn_ID";
 		}
 		else
-		{
+		{	
 			$stuinfo = "$stu_num"."_"."$CheckIn_ID";
-			// $stuinfo = $insert_flag;
 		}
 		return $stuinfo;
 	}
 
 
 	/*
-	* 将获得的学生的蓝牙信息插入数据库
+	* Students will gain the bluetooth information into the database
 	*/
-	public function insert_blue_mac($bluetooth_xml)				// 将获得的学生的蓝牙信息插入数据库
+	public function insert_blue_mac($bluetooth_xml)
 	{
 		$CheckIn_ID = $this->insert_blue_mac_info($bluetooth_xml);
-		// 获取已经签到成功的人数
-		$a = $this->checked_num($CheckIn_ID);
-		
+		// GET the success num
+		$a = "正在录入蓝牙信息";
+
 		return $a;
 	}
 
 	/*
-	* 最后一次插入
-	* 返回未到人数和流水号
+	* the last signing
 	*/
 	public function insert_end_blue_mac($bluetooth_end_xml)
 	{
 		$conn = odbc_connect( $this->connstr, $this->username, $this->password,SQL_CUR_USE_ODBC);
 
-		// 解析获得信息
+		// analyzing XML
 		$bluetooth_s_xml = simplexml_load_string($bluetooth_end_xml);
-		// 检测终止符
+		// detection the terminator
 		if($bluetooth_s_xml->end == '1')
 		{
-			// 取得基本信息
+			// Get basic information
 			$CheckIn_ID       = $this->utf2gbk($bluetooth_s_xml->CheckIn_ID);
 			$need_record_time = $bluetooth_s_xml->need_record_time;
 
-			for( $i=1 ; $i<=$need_record_time ; $i++ )
+			if ($need_record_time > '0')
 			{
-				$BtMac   = "BtMac".$i;
-				$get_mac = $this->utf2gbk($bluetooth_s_xml->$BtMac);
-				$end_update_sql	= " UPDATE dbo.T_List 
-									SET CheckInState = '1' 
-									WHERE CheckIn_ID = '$CheckIn_ID'
-									AND BtMac = '$get_mac'";
-				$end_check_query = odbc_exec($conn ,$end_update_sql);
+				for( $i=1 ; $i<=$need_record_time ; $i++ )
+				{
+					$BtMac   = "BtMac".$i;
+					$get_mac = $this->utf2gbk($bluetooth_s_xml->$BtMac);
+					$y = $this->utf2gbk('已到');
+					$end_update_sql	= " UPDATE dbo.T_List 
+										SET CheckInState = '$y' 
+										WHERE CheckIn_ID = '$CheckIn_ID'
+										AND BtMac = '$get_mac'";
+					$end_check_query = odbc_exec($conn ,$end_update_sql);
+				}
 			}
-			// 读出未到学生数量
-			$not_sql    = "SELECT StuName , StuNo FROM dbo.T_List WHERE CheckInState = '0' AND CheckIn_ID = '$CheckIn_ID'";
-			$not_res    = odbc_exec( $conn ,$not_sql);
-			$not_mk_xml = "<absent_info>";
-			$not_mk_xml.= "<CheckIn_ID>".$this->gbk2utf($CheckIn_ID)."</CheckIn_ID>";
-			$add        = '0';
+			// Read the number of no signing student
+			$n = $this->utf2gbk('未到');
+			$not_sql     = "SELECT StuName , StuNo FROM dbo.T_List WHERE CheckInState = '$n' AND CheckIn_ID = '$CheckIn_ID'";
+			$not_res     = odbc_exec( $conn ,$not_sql);
+
+			$absent_info = "<absent_info>";
+			$absent_info.= "<CheckIn_ID>".$this->gbk2utf($CheckIn_ID)."</CheckIn_ID>";
+			$add         = 1;
 			while (odbc_fetch_array($not_res))
 			{
-				$not_mk_xml.= "<StuNo".$add.">".$this->gbk2utf( odbc_result($not_res,'StuNo') )."</StuNo".$add.">";
-				$not_mk_xml.= "<StuName".$add.">".$this->gbk2utf( odbc_result($not_res,'StuName') )."</StuName".$add.">";
+				$absent_info.= "<StuNo".$add.">".$this->gbk2utf( odbc_result($not_res,'StuNo') )."</StuNo".$add.">";
+				$absent_info.= "<StuName".$add.">".$this->gbk2utf( odbc_result($not_res,'StuName') )."</StuName".$add.">";
 				$add++;
 			}
-			$not_mk_xml.= '</absent_info>';
-			$not_mk_xml.= "<NotSum>".$add."</NotSum>";
-			$absent_info = $not_mk_xml;
-			// $absent_info = $CheckIn_ID;
-			// 标签StuName0....到....StuName99此类标签提取未到人姓名StuNo1....到....StuNo99学号 通过NotSum提取未到总数
+			$add = $add - 1;
+			$absent_info.= "<NotSum>".$add."</NotSum>";
+			$absent_info.= "</absent_info>";
 		}
 		odbc_close ($conn);
 		return $absent_info;
 	}
 
 	/*
-	* 插入单一个人信息
+	* no bluetooth
+	* sign by hand
 	*/ 
 	public function single_insert($single_insert_xml)
 	{
 		$conn = odbc_connect( $this->connstr, $this->username, $this->password,SQL_CUR_USE_ODBC);
 
-		// 解析获得信息
-		$single_insert_s = simplexml_load_string($single_insert_xml);
+		// analyzing XML
+		$absent_add = simplexml_load_string($single_insert_xml);
 
-		$CheckIn_ID     = $this->utf2gbk($single_insert_s->CheckIn_ID);
-		$single_StuNo   = $this->utf2gbk($single_insert_s->single_StuNo);
-		$single_StuName = $this->utf2gbk($single_insert_s->single_StuName);
+		$CheckIn_ID = $this->utf2gbk($absent_add->CheckIn_ID);
 
-		$single_insert = "  UPDATE T_List 
-							SET 
-							CheckInState = '1' 
-							WHERE 
-							StuNo = '$single_StuNo'
-							AND 
-							StuName = '$single_StuName'
-							AND
-							CheckIn_ID = '$CheckIn_ID'
-							";
-
-		$single_update = odbc_exec($conn, $single_insert);
-
-		// 判断update是否成功，这段代码很挫
-		$check_update = "SELECT CheckIn_ID FROM dbo.T_List 
-						 WHERE StuNo = '$single_StuNo' AND StuName = '$single_StuName' AND CheckIn_ID = '$CheckIn_ID'
-							";
-		$check = odbc_exec( $conn, $check_update);
-
-		while(odbc_fetch_array($check)) 
+		$absent_num = $absent_add->absent_num;
+		
+		$flag = 0;
+		// do operation
+		for($i=1 ; $i<=$absent_num ; $i++)
 		{
-			$success = odbc_result( $check, 1);
-			if( $success != 0)
+			$StuNo = "StuNo".$i;
+			$StuName = "StuName".$i;
+
+			$StuNo   = $this->utf2gbk( $absent_add->$StuNo);
+			$StuName = $this->utf2gbk( $absent_add->$StuName);
+			$y = $this->utf2gbk('已到');
+			$update_sql	=  "UPDATE  dbo.T_List 
+							SET 	CheckInState = '$y' 
+							WHERE 	StuNo = '$StuNo'
+							AND 	StuName = '$StuName'
+							AND 	CheckIn_ID = '$CheckIn_ID'
+							";							
+			odbc_exec($conn,$update_sql);
+
+			$check = "SELECT CheckInState 
+						FROM dbo.T_List 
+						WHERE  StuNo = '$StuNo'
+						AND 	StuName = '$StuName'
+						AND 	CheckIn_ID = '$CheckIn_ID'";
+			$exe = odbc_exec( $conn, $check);
+
+			$flag_array = array();
+			while(odbc_fetch_array($exe)) 
 			{
-				$success = 1;
+				$res = odbc_result( $exe, 'CheckInState');
+
+					$flag_array[] = $this->gbk2utf($res);
 			}
 		}
+			if(  strstr('未到', $flag_array))
+			{
+				$flag = '0';
+			}
+			else
+			{
+				$flag = '1';
+			}
 
+		$success = $flag;
 		odbc_close ($conn);
 		return $success;
 	}
@@ -355,9 +374,9 @@ class Check
 
 		$insert_number = "0";
 		// 得到系统时间
-		$time = $this->time();
+		$time = self::time();
 		
-		$sql = odbc_exec($conn,"SELECT * FROM StuInfo WHERE CourseClassNo = $CourseClassNo");
+		$sql = odbc_exec($conn,"SELECT * FROM StuInfo WHERE CourseClassNo = '$CourseClassNo'");
 		while(odbc_fetch_array($sql))
 		{
 			
@@ -381,16 +400,18 @@ class Check
 			$SmallClassName = odbc_result($sql,'SmallClassName');
 			$BtMac 			= odbc_result($sql,'BtMac');
 			$BtName 		= odbc_result($sql,'BtName');
+
+			$n = $this->utf2gbk('未到');
 			$sql_insert_list = "INSERT into 
 								T_List
 									(
 										CheckIn_ID,StuNo,StuName,Grade,DepName,Major,BigClassName,SmallClassName,WeekNo,WeekDay,ClassNo,CourseClassNo,Classroom,CourseName,CourseTeacher,BtMac,BtName,IdentiType,OperatorID,OperatorName,OperatorIdenti,OperateDate,CheckInState
 									)VALUES(
-												'$CheckIn_ID','$StuNo','$StuName','$Grade','$DepName','$Major','$BigClassName','$SmallClassName','$WeekNo' ,'$WeekDay','$ClassNo','$CourseClassNo','$Classroom','$CourseName','$CourseTeacher','$BtMac','$BtName','$IdentiType','$OperatorID','$OperatorName','$OperatorIdenti','$time','0'
+												'$CheckIn_ID','$StuNo','$StuName','$Grade','$DepName','$Major','$BigClassName','$SmallClassName','$WeekNo' ,'$WeekDay','$ClassNo','$CourseClassNo','$Classroom','$CourseName','$CourseTeacher','$BtMac','$BtName','$IdentiType','$OperatorID','$OperatorName','$OperatorIdenti','$time','$n'
 											)";
 			$query_insert = odbc_prepare($conn,$sql_insert_list);
 			$res = odbc_execute($query_insert);
-			if ($res == 1) 
+			if ($res == '1') 
 			{	
 				// 如果执行成功
 				$insert_number++;
@@ -416,7 +437,7 @@ class Check
 		
 		$CheckIn_ID = $this->utf2gbk($bluetooth_s_xml->CheckIn_ID);
 
-		$mac_num = $bluetooth_s_xml->MacNum;
+		$mac_num = $bluetooth_s_xml->Mac_Num;
 		
 		// 进行签到操作
 		for($i=1 ; $i<=$mac_num ; $i++)
@@ -424,22 +445,16 @@ class Check
 			$BtMac = "BtMac".$i;
 
 			$get_mac	= $this->utf2gbk($bluetooth_s_xml->$BtMac);
-
+			$y = $this->utf2gbk('已到');
 			$update_sql	=  "UPDATE  dbo.T_List 
-							SET 	CheckInState = '1' 
+							SET 	CheckInState = '$y' 
 							WHERE 	CheckIn_ID = '$CheckIn_ID'
-							-- AND 	BtMac = '$get_mac'
-							AND EXISTS
-							(
-								SELECT CourseClassNo FROM dbo.T_List WHERE BtMac = '$get_mac'
-							)
-							";
-
-
-							
+							AND 	BtMac = '$get_mac'
+							";							
 			odbc_exec($conn,$update_sql);
 		}
 		odbc_close($conn);
+		// return $this->gbk2utf($get_mac);
 		return $CheckIn_ID;
 	}
 
@@ -453,16 +468,21 @@ class Check
 	{
 		$conn = odbc_connect( $this->connstr, $this->username, $this->password,SQL_CUR_USE_ODBC);
 
-		$sql = "SELECT SUM(CheckInState)
+		$checked_num = 0;
+		$y = $this->utf2gbk('已到');
+
+		$sql = "SELECT CheckInState
 				FROM dbo.T_List 
 				WHERE 	CheckIn_ID = '$CheckIn_ID'";
 		$exe = odbc_exec( $conn, $sql);
-		$checked_num = 0;
-		while( odbc_fetch_array($exe) )
+		while(odbc_result( $exe ))
 		{
-			$checked_num = odbc_result( $exe, 1);
+			$res = odbc_result( $exe, 1);
+			if($res === $y)
+			{
+				$checked_num++;
+			}	
 		}
-
 		odbc_close($conn);
 		return $checked_num;
 	}

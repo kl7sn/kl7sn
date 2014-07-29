@@ -1,0 +1,16 @@
+<resources>
+
+    <color name="huise">#A9A9A9</color>
+    <color name="baise">#F5F5F5</color>
+    <color name="hongse">#8B0000</color>
+    <color name="lanse">#1E90FF</color>
+    <color name="qingse">#AFEEEE</color>
+    <color name="heise">#000000</color>
+    <color name="blue">#0000FF</color>
+    <color name="qianlan">#6495ED</color>
+    <color name="touming">#00000000</color>
+    <color name="danlv">#d366cc66</color>
+    <color name="chunbai">#FFFFFF</color>
+    <color name="ivory">#FFFFCC</color>
+
+</resources>

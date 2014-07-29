@@ -91,7 +91,7 @@
 </binding>
 <service name="Check">
 <documentation />
-<port name="CheckPort" binding="tns:CheckBinding"><soap:address location="http://210.42.151.54:8000/checkin/server_check.php" />
+<port name="CheckPort" binding="tns:CheckBinding"><soap:address location="http://59.68.29.111:8080/checkin/server_check.php" />
 </port>
 </service>
 <message name="time_stringRequest">

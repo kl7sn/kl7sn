@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="hello">Hello World, Blue_SignActivity!</string>
+    <string name="app_name">Blue_Sign</string>
+    <string name="weekno">周次</string>
+    <string name="weekday">星期</string>
+    <string name="classno">节次</string>
+    
+</resources>

@@ -1,0 +1,18 @@
+body{
+	background-color: #EEE;
+}
+
+.line{
+	height:40px;
+	width: 190px;
+	display: inline;
+	float: left;
+}
+
+li{
+	list-style-type:decimal;
+}
+
+.name{
+	font-weight: bolder !important;
+}

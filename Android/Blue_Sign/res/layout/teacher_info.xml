@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/background" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dip"
+        android:layout_marginRight="10dip"
+        android:orientation="vertical" >
+
+        <EditText
+            android:id="@+id/NotEditInfo"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dip"
+            android:background="#d3FF3333"
+            android:editable="false"
+            android:focusable="false"
+            android:hint="不可输入内容"
+            android:shadowColor="#ff000000" />
+
+        <TableLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" >
+
+            <TableRow
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dip"
+                android:gravity="center" >
+
+                <Spinner
+                    android:id="@+id/WeekNo"
+                    android:layout_height="90dip"
+                    android:layout_weight="1.0"
+                    android:background="#D31E90FF"
+                    android:drawSelectorOnTop="true"
+                    android:hint="周次"
+                    android:prompt="@string/weekno" />
+
+                <Spinner
+                    android:id="@+id/WeekDay"
+                    android:layout_height="90dip"
+                    android:layout_marginLeft="10dip"
+                    android:layout_weight="1.0"
+                    android:background="#D31E90FF"
+                    android:drawSelectorOnTop="true"
+                    android:hint="星期"
+                    android:prompt="@string/weekday" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dip"
+                android:gravity="center" >
+
+                <Spinner
+                    android:id="@+id/ClassNo"
+                    android:layout_height="90dip"
+                    android:layout_weight="1.0"
+                    android:background="#D31E90FF"
+                    android:drawSelectorOnTop="true"
+                    android:hint="节次"
+                    android:prompt="@string/classno" />
+
+                <EditText
+                    android:id="@+id/Classroom"
+                    android:layout_height="90dip"
+                    android:layout_marginLeft="10dip"
+                    android:layout_weight="1"
+                    android:background="#D31E90FF"
+                    android:hint="请输入教室位置"
+                    android:shadowColor="#ff000000" />
+            </TableRow>
+        </TableLayout>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/send"
+        android:layout_width="fill_parent"
+        android:layout_height="70dip"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="10dip"
+        android:layout_marginRight="10dip"
+        android:layout_marginTop="10dip"
+        android:background="@color/lanse"
+        android:textColor="@color/baise"
+        android:textSize="20dp"
+        android:text="发送" />
+
+</RelativeLayout>
